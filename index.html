@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shrek Clicker Game</title>
+    <style>
+
+        #clicker {
+
+            font-size: 50px;
+
+        }
+
+        body {
+            text-align: center;
+            font-family: Arial;
+            margin-top: 50px;
+
+        }
+        #score {
+            font-size: 40px;
+            margin-bottom: 20px;
+
+        }
+        #clickImage {
+            cursor: pointer;
+            width: 200px; /* Adjust size as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        #by {
+
+          margin: 0px;
+          padding-bottom: 40px;
+        font-size: 20px;
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 id="clicker">SHREK CLICKER</h1>
+    <h6 id="by">By Saafir</h6>
+
+    <div id="score">Score: 0</div>
+    <img id="clickImage" src="shrek.jpg" alt="Shrek" /> <!-- Start with the first image in the array -->
+
+    <script id="script">
+        let score = 0;
+        const scoreDisplay = document.getElementById('score');
+        const clickImage = document.getElementById('clickImage');
+
+        // Array of images for Shrek's emotions
+        const images = [
+            'grr.jpg', // Happy image
+            'shrekmad.jpg',    // Angry image
+            'shrek_more.jpg',  // Sad image
+            // Add more images as needed
+        ];
+        let currentImageIndex = 0;
+
+        clickImage.addEventListener('click', function() {
+            score++;
+            scoreDisplay.textContent = 'Score: ' + score;
+
+            // Change to the next image in the array
+            currentImageIndex++;
+            if (currentImageIndex >= images.length) {
+                currentImageIndex = 0; // Loop back to the first image
+            }
+            clickImage.src = images[currentImageIndex]; // Update the image
+        });
+    </script>
+</body>
+</html>
