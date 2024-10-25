@@ -5,36 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shrek Clicker Game</title>
     <style>
-
         #clicker {
-
             font-size: 50px;
-
         }
-
         body {
             text-align: center;
             font-family: Arial;
             margin-top: 50px;
-
         }
         #score {
             font-size: 40px;
             margin-bottom: 20px;
-
         }
         #clickImage {
             cursor: pointer;
-            width: 200px; /* Adjust size as needed */
-            height: auto; /* Maintain aspect ratio */
+            width: 200px;
+            height: auto;
         }
-
         #by {
-
-          margin: 0px;
-          padding-bottom: 40px;
-        font-size: 20px;
-
+            margin: 0px;
+            padding-bottom: 40px;
+            font-size: 20px;
+        }
+        #shop {
+            display: none;
+            font-size: 25px;
+            margin-top: 20px;
+        }
+        #autoClickerButton {
+            background-color: white;
+            height: 30px;
+            border-radius: 15px;
+            width: 210px;
+            transition: ease all 0.5s;
+            margin-bottom: 100px;
+        }
+        #autoClickerButton:hover {
+            box-shadow: 3px 3px 1px;
+            background-color: #cfffda;
         }
 
     </style>
@@ -45,33 +53,64 @@
     <h6 id="by">By Saafir</h6>
 
     <div id="score">Score: 0</div>
-    <img id="clickImage" src="shrek.jpg" alt="Shrek" /> <!-- Start with the first image in the array -->
+    <img id="clickImage" src="shrek.jpg" alt="Shrek" />
+
+    <!-- Shop button for auto-clicker -->
+    <div id="shop">
+        <button id="autoClickerButton">Buy Auto-Clicker (1000 clicks)</button>
+    </div>
 
     <script id="script">
         let score = 0;
+        let autoClickerEnabled = false;
         const scoreDisplay = document.getElementById('score');
         const clickImage = document.getElementById('clickImage');
+        const shop = document.getElementById('shop');
+        const autoClickerButton = document.getElementById('autoClickerButton');
 
         // Array of images for Shrek's emotions
         const images = [
-            'grr.jpg', // Happy image
-            'shrekmad.jpg',    // Angry image
-            'shrek_more.jpg',  // Sad image
-            // Add more images as needed
+            'grr.jpg',
+            'shrekmad.jpg',
+            'shrek_more.jpg',
         ];
         let currentImageIndex = 0;
 
-        clickImage.addEventListener('click', function() {
+        // Function to increase score and update image
+        function incrementScore() {
             score++;
             scoreDisplay.textContent = 'Score: ' + score;
-
-            // Change to the next image in the array
             currentImageIndex++;
             if (currentImageIndex >= images.length) {
-                currentImageIndex = 0; // Loop back to the first image
+                currentImageIndex = 0;
             }
-            clickImage.src = images[currentImageIndex]; // Update the image
+            clickImage.src = images[currentImageIndex];
+        }
+
+        clickImage.addEventListener('click', incrementScore);
+
+        // Check score and show shop button if 1 or more clicks
+        function checkShopAvailability() {
+            if (score >= 1 && !autoClickerEnabled) {
+                shop.style.display = 'block';
+            }
+        }
+
+        // Auto-clicker functionality
+        autoClickerButton.addEventListener('click', function() {
+            if (score >= 1) {
+                score -= 1;
+                scoreDisplay.textContent = 'Score: ' + score;
+                autoClickerEnabled = true;
+                shop.style.display = 'none';
+
+                // Start auto-clicking every second
+                setInterval(incrementScore, 100);
+            }
         });
+
+        // Check shop availability on each click
+        clickImage.addEventListener('click', checkShopAvailability);
     </script>
 </body>
 </html>
