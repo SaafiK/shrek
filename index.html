@@ -91,15 +91,15 @@
 
         // Check score and show shop button if 1 or more clicks
         function checkShopAvailability() {
-            if (score >= 1 && !autoClickerEnabled) {
+            if (score >= 1000 && !autoClickerEnabled) {
                 shop.style.display = 'block';
             }
         }
 
         // Auto-clicker functionality
         autoClickerButton.addEventListener('click', function() {
-            if (score >= 1) {
-                score -= 1;
+            if (score >= 1000) {
+                score -= 1000;
                 scoreDisplay.textContent = 'Score: ' + score;
                 autoClickerEnabled = true;
                 shop.style.display = 'none';
