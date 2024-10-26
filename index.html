@@ -19,32 +19,46 @@
         }
         #clickImage {
             cursor: pointer;
-            width: 200px;
-            height: auto;
+            width: auto;
+            height: 200px; /* Fixed height for consistency */
         }
         #by {
             margin: 0px;
             padding-bottom: 40px;
             font-size: 20px;
         }
-        #shop {
-            display: none;
+        #shop, #powerShop {
             font-size: 25px;
             margin-top: 20px;
         }
-        #autoClickerButton {
+        #autoClickerButton, #rebirthButton, .powerButton {
             background-color: white;
             height: 30px;
             border-radius: 15px;
-            width: 210px;
+            width: 250px;
             transition: ease all 0.5s;
-            margin-bottom: 100px;
+            margin-bottom: 20px;
         }
-        #autoClickerButton:hover {
+        #autoClickerButton:hover, #rebirthButton:hover, .powerButton:hover {
             box-shadow: 3px 3px 1px;
             background-color: #cfffda;
         }
+        #rebirthCount {
+            margin-bottom: 10px;
 
+            font-size: 20px;
+        }
+        #goldenShrekButton {
+            width: 350px;
+        }
+        #powerShop {
+            background-color: #c0edca;
+            width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 350px;
+            padding-top: 1px;
+            box-shadow: 10px 10px 5px;
     </style>
 </head>
 <body>
@@ -52,21 +66,41 @@
     <h1 id="clicker">SHREK CLICKER</h1>
     <h6 id="by">By Saafir</h6>
 
+    <!-- Rebirth scoreboard at the top right -->
+
+
     <div id="score">Score: 0</div>
+    <div id="rebirthCount">Rebirths: 0</div>
     <img id="clickImage" src="shrek.jpg" alt="Shrek" />
 
-    <!-- Shop button for auto-clicker -->
+    <!-- Shop buttons for auto-clicker and rebirth -->
     <div id="shop">
         <button id="autoClickerButton">Buy Auto-Clicker (1000 clicks)</button>
+        <button id="rebirthButton" style="display: none;">Rebirth (10,000 clicks)</button>
+    </div>
+
+    <!-- Power-up shop at the bottom -->
+    <div id="powerShop">
+        <h2>Power-Up Shop</h2>
+        <button id="doubleClickButton" class="powerButton">Double Clicks (10 sec) - 1000 clicks</button>
+        <button id="instantClickButton" class="powerButton">Instant 10,000 Clicks - 2 rebirths</button>
+        <button id="goldenShrekButton" class="powerButton">Golden Shrek (1,000,000 clicks) - 100 rebirths</button>
     </div>
 
     <script id="script">
         let score = 0;
+        let rebirths = 0;
         let autoClickerEnabled = false;
+        let doubleClickEnabled = false;
         const scoreDisplay = document.getElementById('score');
         const clickImage = document.getElementById('clickImage');
         const shop = document.getElementById('shop');
         const autoClickerButton = document.getElementById('autoClickerButton');
+        const rebirthButton = document.getElementById('rebirthButton');
+        const rebirthCountDisplay = document.getElementById('rebirthCount');
+        const doubleClickButton = document.getElementById('doubleClickButton');
+        const instantClickButton = document.getElementById('instantClickButton');
+        const goldenShrekButton = document.getElementById('goldenShrekButton');
 
         // Array of images for Shrek's emotions
         const images = [
@@ -78,34 +112,84 @@
 
         // Function to increase score and update image
         function incrementScore() {
-            score++;
+            score += doubleClickEnabled ? 2 : 1;
             scoreDisplay.textContent = 'Score: ' + score;
             currentImageIndex++;
             if (currentImageIndex >= images.length) {
                 currentImageIndex = 0;
             }
             clickImage.src = images[currentImageIndex];
+
+            checkRebirthAvailability();
         }
 
         clickImage.addEventListener('click', incrementScore);
 
         // Check score and show shop button if 1 or more clicks
         function checkShopAvailability() {
-            if (score >= 1000 && !autoClickerEnabled) {
+            if (score >= 1 && !autoClickerEnabled) {
                 shop.style.display = 'block';
             }
         }
 
         // Auto-clicker functionality
         autoClickerButton.addEventListener('click', function() {
-            if (score >= 1000) {
+            if (score >= 1000 && !autoClickerEnabled) {
                 score -= 1000;
                 scoreDisplay.textContent = 'Score: ' + score;
                 autoClickerEnabled = true;
-                shop.style.display = 'none';
+                autoClickerButton.style.display = 'none';
 
-                // Start auto-clicking every second
+                // Start auto-clicking every 100 milliseconds
                 setInterval(incrementScore, 100);
+            }
+        });
+
+        // Check if rebirth is available
+        function checkRebirthAvailability() {
+            if (score >= 10000) {
+                rebirthButton.style.display = 'block';
+            }
+        }
+
+        // Rebirth functionality
+        rebirthButton.addEventListener('click', function() {
+            if (score >= 10000) {
+                score -= 10000;
+                rebirths++;
+                scoreDisplay.textContent = 'Score: ' + score;
+                rebirthCountDisplay.textContent = 'Rebirths: ' + rebirths;
+                rebirthButton.style.display = 'none';
+            }
+        });
+
+        // Power-up Shop Functions
+        doubleClickButton.addEventListener('click', function() {
+            if (score >= 1000) {
+                score -= 1000;
+                scoreDisplay.textContent = 'Score: ' + score;
+                doubleClickEnabled = true;
+                setTimeout(() => {
+                    doubleClickEnabled = false;
+                }, 10000);
+            }
+        });
+
+        instantClickButton.addEventListener('click', function() {
+            if (rebirths >= 2) {
+                rebirths -= 2;
+                rebirthCountDisplay.textContent = 'Rebirths: ' + rebirths;
+                score += 10000;
+                scoreDisplay.textContent = 'Score: ' + score;
+            }
+        });
+
+        goldenShrekButton.addEventListener('click', function() {
+            if (rebirths >= 100) {
+                rebirths -= 100;
+                rebirthCountDisplay.textContent = 'Rebirths: ' + rebirths;
+                score += 1000000;
+                scoreDisplay.textContent = 'Score: ' + score;
             }
         });
 
@@ -114,3 +198,4 @@
     </script>
 </body>
 </html>
+
